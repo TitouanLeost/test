@@ -1,0 +1,31 @@
+name: Deploy Doxygen Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Branche sur laquelle le workflow s'exécute (adaptez si nécessaire)
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: |
+        git config --global user.name 'TitouanLeost'
+        git config --global user.email 'titouan.leost@ensta-bretagne.org'
+
+    - name: Copy documentation to public folder
+      run: |
+        mkdir -p public
+        cp -r docs/html/* public/
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
+
